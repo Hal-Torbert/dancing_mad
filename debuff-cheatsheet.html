@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>P4 デバフカンペ・マジックアウト計算</title>
+  <link rel="stylesheet" href="debuff-cheatsheet.css">
+</head>
+<body>
+  <header>
+    <div><span>P4 TANK TOOL</span><h1>デバフカンペ</h1></div>
+    <a href="index.html">← メインへ</a>
+  </header>
+  <main>
+    <section class="cheatsheet">
+      <div class="section-head"><span>DEBUFF GUIDE</span><h2>アイコン早見表</h2></div>
+      <div class="debuff-group">
+        <div class="group-title"><b>GROUP ①</b><span>GCデバフ</span></div>
+        <div class="debuff-grid">
+          <article><div class="icon-window"><i class="sprite water"></i></div><strong>水圧縮</strong></article>
+          <article><div class="icon-window"><i class="sprite lightning"></i></div><strong>フォーク<br>ライトニング</strong></article>
+          <article><div class="icon-window"><i class="sprite acceleration"></i></div><strong>加速度爆弾</strong></article>
+        </div>
+      </div>
+      <div class="debuff-group">
+        <div class="group-title"><b>GROUP ②</b><span>GC3デバフ</span></div>
+        <div class="debuff-grid two">
+          <article><div class="icon-window"><i class="sprite allagan"></i></div><strong>アラガン<br>フィールド</strong><small>異色</small></article>
+          <article><div class="icon-window"><i class="sprite transcendence"></i></div><strong>死の超越</strong><small>同色</small></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="calculator">
+      <div class="section-head"><span>MAGIC OUT</span><h2>最終処理だけ計算</h2></div>
+      <div class="calc-grid">
+        <article class="input-card">
+          <h3>マジックチャージ</h3>
+          <div class="truth-input" data-key="chargeThunder"><b>⚡ サンダガ</b><div></div></div>
+          <div class="truth-input" data-key="chargeBlizzard"><b>❄ ブリザガ</b><div></div></div>
+        </article>
+        <article class="input-card">
+          <h3>マジックアウト</h3>
+          <div class="truth-input" data-key="outThunder"><b>⚡ サンダガ</b><div></div></div>
+          <div class="truth-input" data-key="outBlizzard"><b>❄ ブリザガ</b><div></div></div>
+        </article>
+      </div>
+      <div id="result" class="result pending" aria-live="polite">
+        <span>FINAL ACTION</span>
+        <h2>4項目を入力</h2>
+      </div>
+      <button id="clear" class="clear">入力をクリア</button>
+    </section>
+  </main>
+  <script src="debuff-cheatsheet.js"></script>
+</body>
+</html>
