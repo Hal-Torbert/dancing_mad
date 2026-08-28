@@ -9,29 +9,27 @@
 <body>
   <header>
     <div><span>P4 TANK TOOL</span><h1>デバフカンペ</h1></div>
-    <a href="index.html">← メインへ</a>
+    <div class="header-actions"><a href="index.html">← メインへ</a><button id="reset-all">全リセット</button></div>
   </header>
   <main>
     <section class="cheatsheet">
       <div class="section-head"><span>DEBUFF CHECK</span><h2>デバフ判定</h2></div>
-      <div class="gc-select" data-gc="GC1">
-        <h3>GC1</h3>
-        <div class="choice-row" data-key="gc1-element"><b>属性</b><button data-value="雷外"><i class="tile-icon sprite lightning"></i><span>雷外</span></button><button data-value="水外"><i class="tile-icon sprite water"></i><span>水外</span></button></div>
-        <div class="choice-row" data-key="gc1-gaze"><b>視線</b><button data-value="見る"><i class="tile-icon sprite gaze"></i><span>見る</span></button><button data-value="見ない"><i class="tile-icon sprite gaze"></i><span>見ない</span></button></div>
-        <div class="choice-row" data-key="gc1-fire"><b>炎</b><button data-value="外"><i class="tile-icon sprite fire"></i><span>外</span></button><button data-value="中"><i class="tile-icon sprite fire"></i><span>中</span></button></div>
+      <div id="debuff-input">
+        <div class="gc-select"><h3>GC1</h3>
+          <div class="choice-row" data-key="gc-truth"><b>真偽</b><button data-value="うそ"><i class="tile-icon sprite gc-false"></i><span>うそ</span></button><button data-value="ほんと"><i class="tile-icon sprite gc-true"></i><span>ほんと</span></button></div>
+          <div class="choice-row" data-key="gc-element"><b>水雷</b><button data-value="雷"><i class="tile-icon sprite lightning"></i><span>雷</span></button><button data-value="水"><i class="tile-icon sprite water"></i><span>水</span></button></div>
+          <div class="choice-row" data-key="gc-timing"><b>処理</b><button data-value="早"><i class="tile-icon sprite acceleration"></i><span>早</span></button><button data-value="遅"><i class="tile-icon sprite acceleration"></i><span>遅</span></button></div>
+        </div>
+        <div class="gc-select"><h3>ほのおつなみ</h3>
+          <div class="choice-row" data-key="fire"><b>ほのお</b><button data-value="うそ"><i class="tile-icon sprite gc-false"></i><span>うそ</span></button><button data-value="ほんと"><i class="tile-icon sprite gc-true"></i><span>ほんと</span></button></div>
+          <div class="choice-row" data-key="water"><b>つなみ</b><button data-value="うそ"><i class="tile-icon sprite gc-false"></i><span>うそ</span></button><button data-value="ほんと"><i class="tile-icon sprite gc-true"></i><span>ほんと</span></button></div>
+        </div>
+        <div class="gc-select"><h3>GC3</h3>
+          <div class="choice-row" data-key="gc3-debuff"><b>傷</b><button data-value="アラガン異色"><i class="tile-icon sprite allagan"></i><span>アラガン異色</span></button><button data-value="超越同色"><i class="tile-icon sprite transcendence"></i><span>超越同色</span></button></div>
+        </div>
+        <button id="clear-debuff" class="clear">デバフ選択をクリア</button>
       </div>
-      <div class="gc-select" data-gc="GC2">
-        <h3>GC2</h3>
-        <div class="choice-row" data-key="gc2-element"><b>属性</b><button data-value="雷外"><i class="tile-icon sprite lightning"></i><span>雷外</span></button><button data-value="水外"><i class="tile-icon sprite water"></i><span>水外</span></button></div>
-        <div class="choice-row" data-key="gc2-gaze"><b>視線</b><button data-value="見る"><i class="tile-icon sprite gaze"></i><span>見る</span></button><button data-value="見ない"><i class="tile-icon sprite gaze"></i><span>見ない</span></button></div>
-        <div class="choice-row" data-key="gc2-water"><b>つなみ</b><button data-value="外"><i class="tile-icon sprite chaos-water"></i><span>外</span></button><button data-value="中"><i class="tile-icon sprite chaos-water"></i><span>中</span></button></div>
-      </div>
-      <div class="gc-select" data-gc="GC3">
-        <h3>GC3</h3>
-        <div class="choice-row" data-key="gc3-debuff"><b>傷</b><button data-value="アラガン異色"><i class="tile-icon sprite allagan"></i><span>アラガン異色</span></button><button data-value="超越同色"><i class="tile-icon sprite transcendence"></i><span>超越同色</span></button></div>
-      </div>
-      <div id="debuff-result" class="debuff-result" aria-live="polite"><span>SELECTED DEBUFFS</span><h3>選択してください</h3></div>
-      <button id="clear-debuff" class="clear">デバフ選択をクリア</button>
+      <div id="debuff-result" class="timeline-result" aria-live="polite" hidden></div>
     </section>
 
     <section class="calculator">
