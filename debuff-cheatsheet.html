@@ -17,25 +17,18 @@
       <div id="debuff-input">
         <div class="gc-select"><h3>① GC1回目</h3>
           <div class="choice-row" data-key="gc1-truth"><b>真偽</b><button data-value="うそ"><i class="tile-icon sprite gc-false"></i><span>うそ</span></button><button data-value="ほんと"><i class="tile-icon sprite gc-true"></i><span>ほんと</span></button></div>
-          <div class="choice-row multi" data-key="gc1-kind"><b>デバフ</b><button data-value="雷"><i class="tile-icon sprite lightning"></i><span>雷</span></button><button data-value="水"><i class="tile-icon sprite water"></i><span>水</span></button><button data-value="視線＋加速度"><i class="tile-icon sprite gaze"></i><span>視線＋加速</span></button><button data-value="加速度のみ"><i class="tile-icon sprite acceleration"></i><span>加速のみ</span></button></div>
-          <div class="choice-row timing-row" data-key="gc1-timing" hidden><b>水雷</b><button data-value="早"><span>早</span></button><button data-value="遅"><span>遅</span></button></div>
+          <div class="element-choice" data-gc="gc1"><b>水雷（該当時）</b><div class="element-grid"><button data-kind="雷" data-timing="早"><i class="tile-icon sprite lightning"></i><span>早雷</span></button><button data-kind="雷" data-timing="遅"><i class="tile-icon sprite lightning"></i><span>遅雷</span></button><button data-kind="水" data-timing="早"><i class="tile-icon sprite water"></i><span>早水</span></button><button data-kind="水" data-timing="遅"><i class="tile-icon sprite water"></i><span>遅水</span></button></div></div>
         </div>
-        <div class="gc-select"><h3>② ほのおつなみ1回目</h3>
-          <div class="choice-row" data-key="chaos1-truth"><b>真偽</b><button data-value="うそ"><i class="tile-icon sprite gc-false"></i><span>うそ</span></button><button data-value="ほんと"><i class="tile-icon sprite gc-true"></i><span>ほんと</span></button></div>
-          <div class="choice-row" data-key="chaos1-kind"><b>種類</b><button data-value="ほのお"><i class="tile-icon sprite fire"></i><span>ほのお</span></button><button data-value="つなみ"><i class="tile-icon sprite chaos-water"></i><span>つなみ</span></button></div>
-        </div>
-        <div class="gc-select"><h3>③ GC2回目</h3>
+        <div class="gc-select"><h3>② GC2回目</h3>
           <div class="choice-row" data-key="gc2-truth"><b>真偽</b><button data-value="うそ"><i class="tile-icon sprite gc-false"></i><span>うそ</span></button><button data-value="ほんと"><i class="tile-icon sprite gc-true"></i><span>ほんと</span></button></div>
-          <div class="choice-row multi" data-key="gc2-kind"><b>デバフ</b><button data-value="雷"><i class="tile-icon sprite lightning"></i><span>雷</span></button><button data-value="水"><i class="tile-icon sprite water"></i><span>水</span></button><button data-value="視線＋加速度"><i class="tile-icon sprite gaze"></i><span>視線＋加速</span></button><button data-value="加速度のみ"><i class="tile-icon sprite acceleration"></i><span>加速のみ</span></button></div>
-          <div class="choice-row timing-row" data-key="gc2-timing" hidden><b>水雷</b><button data-value="早"><span>早</span></button><button data-value="遅"><span>遅</span></button></div>
+          <div class="element-choice" data-gc="gc2" hidden><b>水雷</b><div class="element-grid"><button data-kind="雷" data-timing="早"><i class="tile-icon sprite lightning"></i><span>早雷</span></button><button data-kind="雷" data-timing="遅"><i class="tile-icon sprite lightning"></i><span>遅雷</span></button><button data-kind="水" data-timing="早"><i class="tile-icon sprite water"></i><span>早水</span></button><button data-kind="水" data-timing="遅"><i class="tile-icon sprite water"></i><span>遅水</span></button></div></div>
+          <div id="gc2-auto" class="auto-value" hidden>GC2は頭割り＋加速度（自動）</div>
         </div>
-        <div class="gc-select"><h3>④ ほのおつなみ2回目</h3>
-          <div class="choice-row" data-key="chaos2-truth"><b>真偽</b><button data-value="うそ"><i class="tile-icon sprite gc-false"></i><span>うそ</span></button><button data-value="ほんと"><i class="tile-icon sprite gc-true"></i><span>ほんと</span></button></div>
-          <div id="chaos2-kind" class="auto-value">種類は1回目の反対を自動選択</div>
+        <div class="gc-select"><h3>③ ほのお</h3>
+          <div class="choice-row" data-key="fire-truth"><b>真偽</b><button data-value="うそ"><i class="tile-icon sprite gc-false"></i><span>うそ</span></button><button data-value="ほんと"><i class="tile-icon sprite gc-true"></i><span>ほんと</span></button></div>
         </div>
-        <div class="gc-select"><h3>⑤ GC3</h3>
-          <div class="choice-row" data-key="gc3-debuff"><b>傷</b><button data-value="アラガン異色"><i class="tile-icon sprite allagan"></i><span>アラガン異色</span></button><button data-value="超越同色"><i class="tile-icon sprite transcendence"></i><span>超越同色</span></button></div>
-          <div class="choice-row" data-key="beam-truth"><b>ビーム</b><button data-value="うそ"><i class="tile-icon sprite gc-false"></i><span>うそ</span></button><button data-value="ほんと"><i class="tile-icon sprite gc-true"></i><span>ほんと</span></button></div>
+        <div class="gc-select"><h3>④ つなみ</h3>
+          <div class="choice-row" data-key="tsunami-truth"><b>真偽</b><button data-value="うそ"><i class="tile-icon sprite gc-false"></i><span>うそ</span></button><button data-value="ほんと"><i class="tile-icon sprite gc-true"></i><span>ほんと</span></button></div>
         </div>
         <button id="clear-debuff" class="clear">デバフ選択をクリア</button>
       </div>
