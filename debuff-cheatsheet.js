@@ -45,7 +45,7 @@ function resetDebuffs(){
 }
 function resolveElement(truth,kind){
   const spread=(truth==='ほんと'&&kind==='雷')||(truth==='うそ'&&kind==='水');
-  return {icons:`<i class="sprite ${kind==='雷'?'lightning':'water'}"></i>`,action:spread?'離れる':'頭割り'};
+  return {icons:`<i class="sprite ${kind==='雷'?'lightning':'water'}"></i>`,marker:spread?'Dマーカー':'Aマーカー',action:spread?'離れる':'頭割り'};
 }
 function resolveGaze(truth){return truth==='ほんと'?'見ない':'見る';}
 function resolveAcceleration(truth){return truth==='ほんと'?'止まる':'動く';}
@@ -56,7 +56,7 @@ function showTimeline(){
   const elementTiming=debuffs.elementTiming;
   const otherTruth=debuffs[`${otherGc}-truth`];
   const actionRow=(icons,action)=>`<div class="timeline-action"><div class="timeline-icons">${icons}</div><strong>${action}</strong></div>`;
-  const timedActions=timing=>elementTiming===timing?actionRow(element.icons,element.action):actionRow('<i class="sprite gc-true"></i><i class="sprite acceleration"></i>',`頭割り・${resolveAcceleration(otherTruth)}`);
+  const timedActions=timing=>elementTiming===timing?actionRow(`${element.icons}<i class="sprite acceleration"></i>`,`${timing==='遅'?`${element.marker}・`:''}${element.action}・${resolveAcceleration(debuffs[`${elementGc}-truth`])}`):actionRow('<i class="sprite gc-true"></i><i class="sprite acceleration"></i>',`${timing==='遅'?'Aマーカー・':''}頭割り・${resolveAcceleration(otherTruth)}`);
   const gazeAction=gc=>actionRow('<i class="sprite gaze"></i>',resolveGaze(debuffs[`${gc}-truth`]));
   document.querySelector('#debuff-result').innerHTML=`
     <article class="timeline-step"><b>①</b><div class="timeline-copy"><small>早処理＋加速度</small>${timedActions('早')}</div></article>
@@ -79,11 +79,12 @@ console.assert(resolveMagicOut({chargeThunder:true,outThunder:false,chargeBlizza
 console.assert(resolveMagicOut({chargeThunder:true,outThunder:true,chargeBlizzard:true,outBlizzard:false})==='扇踏む（ブリザガ）');
 console.assert(resolveMagicOut({chargeThunder:true,outThunder:false,chargeBlizzard:true,outBlizzard:true})==='ライン踏む（サンダガ）');
 console.assert(resolveMagicOut({chargeThunder:true,outThunder:true,chargeBlizzard:false,outBlizzard:false})==='両方踏まない');
-console.assert(resolveElement('ほんと','雷').action==='離れる');
-console.assert(resolveElement('うそ','水').action==='離れる');
-console.assert(resolveElement('うそ','雷').action==='頭割り');
-console.assert(resolveElement('ほんと','水').action==='頭割り');
+console.assert(resolveElement('ほんと','雷').action==='離れる'&&resolveElement('ほんと','雷').marker==='Dマーカー');
+console.assert(resolveElement('うそ','水').action==='離れる'&&resolveElement('うそ','水').marker==='Dマーカー');
+console.assert(resolveElement('うそ','雷').action==='頭割り'&&resolveElement('うそ','雷').marker==='Aマーカー');
+console.assert(resolveElement('ほんと','水').action==='頭割り'&&resolveElement('ほんと','水').marker==='Aマーカー');
 console.assert(resolveGaze('ほんと')==='見ない');
+console.assert(resolveAcceleration('ほんと')==='止まる');
 console.assert(resolveAcceleration('うそ')==='動く');
 console.assert(resolveChaos('ほのお','ほんと')==='外安置');
 console.assert(resolveChaos('つなみ','ほんと')==='中安置');
