@@ -24,22 +24,28 @@ document.querySelectorAll('.choice-row button').forEach(button=>button.addEventL
 }));
 document.querySelectorAll('.element-choice button').forEach(button=>button.addEventListener('click',()=>{
   const gc=button.closest('.element-choice').dataset.gc;
-  debuffs.elementGc=gc;debuffs.elementKind=button.dataset.kind;debuffs.elementTiming=button.dataset.timing;
-  document.querySelectorAll('.element-choice button').forEach(item=>item.classList.toggle('selected',item===button));
+  debuffs[gc]={kind:button.dataset.kind||null,timing:button.dataset.timing||null,role:button.dataset.role||null};
+  button.closest('.element-choice').querySelectorAll('button').forEach(item=>item.classList.toggle('selected',item===button));
+  if(gc==='gc1'){delete debuffs.gc2;document.querySelectorAll('.element-choice[data-gc="gc2"] button').forEach(item=>item.classList.remove('selected'));}
   syncElementInputs();
   if(isDebuffComplete())showTimeline();
 }));
 function syncElementInputs(){
-  const gc2Choice=document.querySelector('.element-choice[data-gc="gc2"]'),gc2Auto=document.querySelector('#gc2-auto');
-  if(!debuffs['gc2-truth']){gc2Choice.hidden=true;gc2Auto.hidden=true;return;}
-  gc2Choice.hidden=debuffs.elementGc==='gc1';gc2Auto.hidden=debuffs.elementGc!=='gc1';
+  const gc2Choice=document.querySelector('.element-choice[data-gc="gc2"]');
+  if(!debuffs['gc2-truth']||!debuffs.gc1){gc2Choice.hidden=true;return;}
+  gc2Choice.hidden=false;
+  const gc1IsElement=!!debuffs.gc1.kind;
+  gc2Choice.querySelectorAll('button').forEach(button=>{
+    const valid=gc1IsElement?!!button.dataset.role:!!button.dataset.kind;
+    button.hidden=!valid;
+    if(!valid)button.classList.remove('selected');
+  });
 }
-function isDebuffComplete(){return baseDebuffKeys.every(key=>debuffs[key])&&debuffs.elementGc;}
+function isDebuffComplete(){return baseDebuffKeys.every(key=>debuffs[key])&&debuffs.gc1&&debuffs.gc2;}
 function resetDebuffs(){
   for(const key of Object.keys(debuffs))delete debuffs[key];
   document.querySelectorAll('.choice-row button,.element-choice button').forEach(button=>{button.classList.remove('selected');button.setAttribute('aria-pressed','false');});
   document.querySelector('.element-choice[data-gc="gc2"]').hidden=true;
-  document.querySelector('#gc2-auto').hidden=true;
   document.querySelector('#debuff-input').hidden=false;
   document.querySelector('#debuff-result').hidden=true;
 }
@@ -49,20 +55,26 @@ function resolveElement(truth,kind){
 }
 function resolveGaze(truth){return truth==='ほんと'?'見ない':'見る';}
 function resolveAcceleration(truth){return truth==='ほんと'?'止まる':'動く';}
+function accelerationTiming(gc,role){return role==='gaze'?(gc==='gc1'?'早':'遅'):(gc==='gc1'?'遅':'早');}
 function resolveChaos(kind,truth){return kind==='ほのお'?(truth==='ほんと'?'外安置':'中安置'):(truth==='ほんと'?'中安置':'外安置');}
 function showTimeline(){
-  const elementGc=debuffs.elementGc,otherGc=elementGc==='gc1'?'gc2':'gc1';
-  const element=resolveElement(debuffs[`${elementGc}-truth`],debuffs.elementKind);
-  const elementTiming=debuffs.elementTiming;
-  const otherTruth=debuffs[`${otherGc}-truth`];
+  const elementGc=debuffs.gc1.kind?'gc1':'gc2',roleGc=elementGc==='gc1'?'gc2':'gc1';
+  const elementDebuff=debuffs[elementGc],roleDebuff=debuffs[roleGc];
+  const element=resolveElement(debuffs[`${elementGc}-truth`],elementDebuff.kind);
+  const accelTiming=accelerationTiming(roleGc,roleDebuff.role);
   const actionRow=(icons,action)=>`<div class="timeline-action"><div class="timeline-icons">${icons}</div><strong>${action}</strong></div>`;
-  const timedActions=timing=>elementTiming===timing?actionRow(`${element.icons}<i class="sprite acceleration"></i>`,`${timing==='遅'?`${element.marker}・`:''}${element.action}・${resolveAcceleration(debuffs[`${elementGc}-truth`])}`):actionRow('<i class="sprite gc-true"></i><i class="sprite acceleration"></i>',`${timing==='遅'?'Aマーカー・':''}頭割り・${resolveAcceleration(otherTruth)}`);
+  const timedActions=timing=>{
+    const hasElement=elementDebuff.timing===timing,hasAcceleration=accelTiming===timing;
+    const icons=`${hasElement?element.icons:'<i class="sprite gc-true"></i>'}${hasAcceleration?'<i class="sprite acceleration"></i>':''}`;
+    const base=hasElement?`${timing==='遅'?`${element.marker}・`:''}${element.action}`:`${timing==='遅'?'Aマーカー・':''}頭割り`;
+    return actionRow(icons,`${base}${hasAcceleration?`・${resolveAcceleration(debuffs[`${roleGc}-truth`])}`:''}`);
+  };
   const gazeAction=gc=>actionRow('<i class="sprite gaze"></i>',resolveGaze(debuffs[`${gc}-truth`]));
   document.querySelector('#debuff-result').innerHTML=`
-    <article class="timeline-step"><b>①</b><div class="timeline-copy"><small>早処理＋加速度</small>${timedActions('早')}</div></article>
+    <article class="timeline-step"><b>①</b><div class="timeline-copy"><small>早処理</small>${timedActions('早')}</div></article>
     <article class="timeline-step"><b>②</b><div class="timeline-copy"><small>視線①</small>${gazeAction('gc1')}</div></article>
     <article class="timeline-step"><b>③</b><div class="timeline-copy"><small>ほのお</small>${actionRow('<i class="sprite fire"></i>',resolveChaos('ほのお',debuffs['fire-truth']))}</div></article>
-    <article class="timeline-step"><b>④</b><div class="timeline-copy"><small>遅処理＋加速度</small>${timedActions('遅')}</div></article>
+    <article class="timeline-step"><b>④</b><div class="timeline-copy"><small>遅処理</small>${timedActions('遅')}</div></article>
     <article class="timeline-step"><b>⑤</b><div class="timeline-copy"><small>視線②</small>${gazeAction('gc2')}</div></article>
     <article class="timeline-step"><b>⑥</b><div class="timeline-copy"><small>つなみ</small>${actionRow('<i class="sprite chaos-water"></i>',resolveChaos('つなみ',debuffs['tsunami-truth']))}</div></article>
     <div class="timeline-controls"><button id="edit-debuff">入力へ戻る</button><button id="reset-left">左側をリセット</button></div>`;
@@ -86,5 +98,9 @@ console.assert(resolveElement('ほんと','水').action==='頭割り'&&resolveEl
 console.assert(resolveGaze('ほんと')==='見ない');
 console.assert(resolveAcceleration('ほんと')==='止まる');
 console.assert(resolveAcceleration('うそ')==='動く');
+console.assert(accelerationTiming('gc1','gaze')==='早');
+console.assert(accelerationTiming('gc1','accel')==='遅');
+console.assert(accelerationTiming('gc2','gaze')==='遅');
+console.assert(accelerationTiming('gc2','accel')==='早');
 console.assert(resolveChaos('ほのお','ほんと')==='外安置');
 console.assert(resolveChaos('つなみ','ほんと')==='中安置');
