@@ -42,15 +42,20 @@
           <div class="truth-input" data-key="chargeThunder"><b>⚡ サンダガ</b><div></div></div>
           <div class="truth-input" data-key="chargeBlizzard"><b>❄ ブリザガ</b><div></div></div>
         </article>
-        <article class="input-card">
+        <article class="input-card out-card">
           <h3>マジックアウト</h3>
-          <div class="truth-input" data-key="outThunder"><b>⚡ サンダガ</b><div></div></div>
-          <div class="truth-input" data-key="outBlizzard"><b>❄ ブリザガ</b><div></div></div>
+          <p class="out-order">⚡ サンダガ・❄ ブリザガ</p>
+          <div class="out-pattern" role="group" aria-label="マジックアウトのサンダガとブリザガの真偽">
+            <button class="out-choice" data-out-thunder="true" data-out-blizzard="true"><b>①</b><span class="out-values"><span class="out-value true"><i aria-hidden="true"></i>真</span><span>・</span><span class="out-value true"><i aria-hidden="true"></i>真</span></span></button>
+            <button class="out-choice" data-out-thunder="true" data-out-blizzard="false"><b>②</b><span class="out-values"><span class="out-value true"><i aria-hidden="true"></i>真</span><span>・</span><span class="out-value false"><i aria-hidden="true">?</i>偽</span></span></button>
+            <button class="out-choice" data-out-thunder="false" data-out-blizzard="true"><b>③</b><span class="out-values"><span class="out-value false"><i aria-hidden="true">?</i>偽</span><span>・</span><span class="out-value true"><i aria-hidden="true"></i>真</span></span></button>
+            <button class="out-choice" data-out-thunder="false" data-out-blizzard="false"><b>④</b><span class="out-values"><span class="out-value false"><i aria-hidden="true">?</i>偽</span><span>・</span><span class="out-value false"><i aria-hidden="true">?</i>偽</span></span></button>
+          </div>
         </article>
       </div>
       <div id="result" class="result pending" aria-live="polite">
         <span>FINAL ACTION</span>
-        <h2>4項目を入力</h2>
+        <h2>3項目を入力</h2>
       </div>
       <button id="clear" class="clear">入力をクリア</button>
     </section>

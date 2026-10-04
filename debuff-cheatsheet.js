@@ -4,16 +4,25 @@ document.querySelectorAll('.truth-input').forEach(row=>{row.querySelector('div')
 
 function render(){
   document.querySelectorAll('.truth-input').forEach(row=>row.querySelectorAll('.truth').forEach(button=>button.classList.toggle('selected',String(state[row.dataset.key])===button.dataset.value)));
+  document.querySelectorAll('.out-choice').forEach(button=>{
+    const selected=String(state.outThunder)===button.dataset.outThunder&&String(state.outBlizzard)===button.dataset.outBlizzard;
+    button.classList.toggle('selected',selected);button.setAttribute('aria-pressed',selected);
+  });
   const ready=Object.values(state).every(value=>value!==null),result=document.querySelector('#result');
   result.classList.toggle('pending',!ready);
-  if(!ready){result.innerHTML='<span>FINAL ACTION</span><h2>4項目を入力</h2>';return;}
+  if(!ready){result.innerHTML='<span>FINAL ACTION</span><h2>3項目を入力</h2>';return;}
   result.innerHTML=`<span>FINAL ACTION</span><h2>${resolveMagicOut(state)}</h2>`;
 }
 function resolveMagicOut({chargeThunder,chargeBlizzard,outThunder,outBlizzard}){
   const line=chargeThunder!==outThunder,fan=chargeBlizzard!==outBlizzard;
   return line&&fan?'両方踏む':fan?'扇踏む（ブリザガ）':line?'ライン踏む（サンダガ）':'両方踏まない';
 }
-document.addEventListener('click',event=>{const button=event.target.closest('.truth');if(button){state[button.closest('.truth-input').dataset.key]=button.dataset.value==='true';render();}});
+document.addEventListener('click',event=>{
+  const truth=event.target.closest('.truth');
+  if(truth){state[truth.closest('.truth-input').dataset.key]=truth.dataset.value==='true';render();return;}
+  const out=event.target.closest('.out-choice');
+  if(out){state.outThunder=out.dataset.outThunder==='true';state.outBlizzard=out.dataset.outBlizzard==='true';render();}
+});
 const baseDebuffKeys=['gc1-truth','gc2-truth','fire-truth','tsunami-truth'];
 document.querySelectorAll('.choice-row button').forEach(button=>button.addEventListener('click',()=>{
   const row=button.closest('.choice-row'),key=row.dataset.key;
@@ -62,14 +71,14 @@ function showTimeline(){
   const elementDebuff=debuffs[elementGc],roleDebuff=debuffs[roleGc];
   const element=resolveElement(debuffs[`${elementGc}-truth`],elementDebuff.kind);
   const accelTiming=accelerationTiming(roleGc,roleDebuff.role);
-  const actionRow=(icons,action)=>`<div class="timeline-action"><div class="timeline-icons">${icons}</div><strong>${action}</strong></div>`;
+  const actionRow=(icons,action,ownGaze=false)=>`<div class="timeline-action${ownGaze?' own-gaze':''}"><div class="timeline-icons">${icons}</div><div class="timeline-action-copy"><strong>${action}</strong>${ownGaze?'<span class="own-gaze-badge">自分が視線持ち</span>':''}</div></div>`;
   const timedActions=timing=>{
     const hasElement=elementDebuff.timing===timing,hasAcceleration=accelTiming===timing;
     const icons=`${hasElement?element.icons:'<i class="sprite gc-true"></i>'}${hasAcceleration?'<i class="sprite acceleration"></i>':''}`;
     const base=hasElement?`${timing==='遅'?`${element.marker}・`:''}${element.action}`:`${timing==='遅'?'Aマーカー・':''}頭割り`;
     return actionRow(icons,`${base}${hasAcceleration?`・${resolveAcceleration(debuffs[`${roleGc}-truth`])}`:''}`);
   };
-  const gazeAction=gc=>actionRow('<i class="sprite gaze"></i>',resolveGaze(debuffs[`${gc}-truth`]));
+  const gazeAction=gc=>actionRow('<i class="sprite gaze"></i>',resolveGaze(debuffs[`${gc}-truth`]),roleGc===gc&&roleDebuff.role==='gaze');
   document.querySelector('#debuff-result').innerHTML=`
     <article class="timeline-step"><b>①</b><div class="timeline-copy"><small>早処理</small>${timedActions('早')}</div></article>
     <article class="timeline-step"><b>②</b><div class="timeline-copy"><small>視線①</small>${gazeAction('gc1')}</div></article>
