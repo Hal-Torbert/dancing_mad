@@ -71,12 +71,13 @@ function showTimeline(){
   const elementDebuff=debuffs[elementGc],roleDebuff=debuffs[roleGc];
   const element=resolveElement(debuffs[`${elementGc}-truth`],elementDebuff.kind);
   const accelTiming=accelerationTiming(roleGc,roleDebuff.role);
-  const actionRow=(icons,action,ownGaze=false)=>`<div class="timeline-action${ownGaze?' own-gaze':''}"><div class="timeline-icons">${icons}</div><div class="timeline-action-copy"><strong>${action}</strong>${ownGaze?'<span class="own-gaze-badge">自分が視線持ち</span>':''}</div></div>`;
+  const actionRow=(icons,action,ownGaze=false,ownAcceleration=false)=>`<div class="timeline-action${ownGaze?' own-gaze':''}${ownAcceleration?' own-acceleration':''}"><div class="timeline-icons">${icons}</div><div class="timeline-action-copy"><strong>${action}</strong>${ownGaze?'<span class="own-gaze-badge">自分が視線持ち</span>':''}${ownAcceleration?'<span class="own-acceleration-badge">自分の加速度</span>':''}</div></div>`;
   const timedActions=timing=>{
     const hasElement=elementDebuff.timing===timing,hasAcceleration=accelTiming===timing;
     const icons=`${hasElement?element.icons:'<i class="sprite gc-true"></i>'}${hasAcceleration?'<i class="sprite acceleration"></i>':''}`;
     const base=hasElement?`${timing==='遅'?`${element.marker}・`:''}${element.action}`:`${timing==='遅'?'Aマーカー・':''}頭割り`;
-    return actionRow(icons,`${base}${hasAcceleration?`・${resolveAcceleration(debuffs[`${roleGc}-truth`])}`:''}`);
+    const acceleration=hasAcceleration?resolveAcceleration(debuffs[`${roleGc}-truth`]):'';
+    return actionRow(icons,`${base}${hasAcceleration?`・<span class="acceleration-command">${acceleration}</span>`:''}`,false,hasAcceleration);
   };
   const gazeAction=gc=>actionRow('<i class="sprite gaze"></i>',resolveGaze(debuffs[`${gc}-truth`]),roleGc===gc&&roleDebuff.role==='gaze');
   document.querySelector('#debuff-result').innerHTML=`
